@@ -1,0 +1,124 @@
+@font-face{
+  font-family: TrebuchetMS;
+  src: url('TrebuchetMS-Bold.ttf');
+}
+
+/*@font-face{
+  font-family: Georgia;
+  src: url('Georgia.ttf');
+}*/
+
+#last {
+  position: absolute;
+  top: 2000px;
+  width: 100px;
+  height: 100px;
+}
+
+#topbar {
+  width: 1519px;
+  height: 90px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background-color: black;
+}
+
+#title {
+  font-family: 'TrebuchetMS', sans-serif;
+  color: #f4b903;
+  font-size: 28pt;
+  position: absolute;
+  top: 25px;
+  left: 316px;
+}
+
+#infotext {
+  font-family: 'Georgia', serif;
+  font-size: 16px;
+  color: black;
+  width: 940px;
+  position: absolute;
+  top: 120px;
+  left: 289px;
+}
+
+#totalarea {
+  width: 940px;
+  height: 600px;
+  position: absolute;
+  top: 256px;
+  left: 289px;
+}
+
+.countryselect {
+  font-family: 'Georgia', serif;
+  color: black;
+  font-size: 11pt;
+  top: 176px;
+  position: absolute;
+  padding: 4px 10px 4px 10px;
+  background-color: #f1f1f1;
+  border-radius: 4px;
+  border: 1px solid lightgray;
+}
+
+.countryselect:hover {
+  background-color: lightgray;
+}
+
+.countryselect-sel{
+    background-color: lightgray;
+}
+#ind {
+  left: 427px;
+}
+
+#aus {
+  left: 475px;
+}
+
+#pak {
+  left: 525px;
+}
+
+#sa {
+  left: 574px;
+}
+
+#nz {
+  left: 616px;
+}
+
+#wi {
+  left: 662px;
+}
+
+#eng {
+  left: 708px;
+}
+
+#zim {
+  left: 759px;
+}
+
+
+
+.playerarea {
+  position: absolute;
+  background-color: lightgray;
+  box-shadow:0px 0px 0px 0.5px white inset;
+  color: black;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 10px;
+
+
+}
+
+.matcharea {
+  position: absolute;
+  background-color: red;
+  box-shadow: 0px 0px 0px 0.25px inset;
+  z-index: -1;
+}

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+         <link rel="stylesheet" type="text/css" href="Replicate.css">
+         <script src="data.json"></script>
+         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    </head>
+
+    <body>
+      <div id="topbar">
+        <div id="title">ODI: AUS BATTING</div>
+
+
+      </div>
+
+      <div id="ind" class="countryselect">Ind</div>
+      <div id="aus" class="countryselect  countryselect-sel">Aus</div>
+      <div id="pak" class="countryselect">Pak</div>
+      <div id="sa" class="countryselect">SA</div>
+      <div id="nz" class="countryselect">NZ</div>
+      <div id="wi" class="countryselect">WI</div>
+      <div id="eng" class="countryselect">Eng</div>
+      <div id="zim" class="countryselect">Zim</div>
+
+      <div id="infotext">For the popular cricket-playing nations, we took every batsmen that
+        has scored at least 20 runs in their ODI career, and plotted their run rate for every
+        single match. Size = Number of runs. Colour = strike rate</div>
+      <div id="totalarea"></div>
+
+      <div id="last"></div>
+
+
+
+    </body>
+
+    <script>
+
+
+    var allplayers=[];  //name,runs,avg,sr,firstgame,lastgame
+    var playerorder=[];
+    var country, name, matches, notout, runs, balls, avg, sr, firstgame, lastgame;
+    var date, gamedate, datesplit;
+    var keys=Object.keys(data);
+    for (i=0;i<keys.length;i++)
+    {
+      name=data[keys[i]][0][0];
+      runs=parseFloat(data[keys[i]][0][1]);
+      balls=Math.round((parseFloat(data[keys[i]][0][1])/parseFloat(data[keys[i]][0][2]))*100);
+      matches=1;
+      notout=0;
+      date=data[keys[i]][0][3];
+      datesplit=date.split("/");
+      firstgame=parseFloat(datesplit[2])+((((parseFloat(datesplit[1])-1)*30)+parseFloat(datesplit[0]))/365);
+      lastgame=firstgame;
+      for (j=1;j<data[keys[i]].length;j++)
+      {
+        if (data[keys[i]][j][0]==name)
+        {
+          runs+=parseFloat(data[keys[i]][j][1]);
+          /*if ((parseFloat(data[keys[i][j][1]])*0)!=0)  //why?
+          {
+            console.log(data[keys[i]][j][1])
+          }*/
+          if (parseFloat(data[keys[i]][j][2])!=0)
+          {
+            balls+=Math.round((parseFloat(data[keys[i]][j][1])/parseFloat(data[keys[i]][j][2]))*100);
+          }
+          matches++;
+          if ((parseFloat(data[keys[i]][j][6])==1)||(parseFloat(data[keys[i]][j][6])==0))
+          {
+            notout+=parseFloat(data[keys[i]][j][6]);
+          }
+          else
+          {
+            notout+=parseFloat(data[keys[i]][j][7]);
+          }
+
+          date=data[keys[i]][j][3]; //first and last date
+          datesplit=date.split("/");
+          gamedate=parseFloat(datesplit[2])+((((parseFloat(datesplit[1])-1)*30)+parseFloat(datesplit[0]))/365);
+          if (gamedate<firstgame)
+          {
+            firstgame=gamedate;
+          }
+          if (gamedate>lastgame)
+          {
+            lastgame=gamedate;
+          }
+        }
+        else
+        {
+          if ((runs*0)!=0)   //jugaad
+          {
+            runs=0;
+          }
+          if (matches>notout)
+          {
+            avg=runs/(matches-notout);
+          }
+          else
+          {
+            avg=runs;
+          }
+          sr=(runs/balls)*100;
+          if ((sr*0)!=0)    //jugaad
+          {
+            sr=0;
+          }
+          country=keys[i];
+          var player=[];
+          player.splice(0,7,name,runs,avg,sr,firstgame,lastgame,country);
+          allplayers.push(player);
+
+
+          name=data[keys[i]][j][0]; //for next player
+          runs=parseFloat(data[keys[i]][j][1]);
+          if (parseFloat(data[keys[i]][j][2])!=0)
+          {
+            balls=Math.round((parseFloat(data[keys[i]][j][1])/parseFloat(data[keys[i]][j][2]))*100);
+          }
+          matches=0;
+          notout=0;
+          date=data[keys[i]][j][3];
+          datesplit=date.split("/");
+          firstgame=parseFloat(datesplit[2])+((((parseFloat(datesplit[1])-1)*30)+parseFloat(datesplit[0]))/365);
+          lastgame=firstgame;
+        }
+      }
+      country=data[keys[i]];
+    }
+
+
+    var countryruns=[];
+    var temp=[];
+    runs=allplayers[0][1];
+    country=allplayers[0][6];
+    for (i=1;i<allplayers.length;i++)
+    {
+      if (parseFloat(allplayers[i][1])>20)
+      {
+      if (allplayers[i][6]==country)
+        {
+        runs+=allplayers[i][1];
+        }
+        else
+        {
+          temp.splice(0,2,country,runs);
+          var x = temp.slice(0);
+          countryruns.push(x);
+          runs=allplayers[i][1];
+          country=allplayers[i][6];
+        }
+      }
+    }
+    temp.splice(0,2,country,runs);
+    var x = temp.slice(0);
+    countryruns.push(x);
+
+    var whichcountry,runtot,pixperrun;
+    var countrylist=[];
+
+
+    var dict={'#aus':'Australia','#eng':'England','#ind':'India','#pak':'Pakistan','#sa':'South Africa','#sl':'Sri Lanka','#wi':'West Indies','#nz':'New Zealand','#zim':'Zimbabwe'};
+    var dictabb={'#aus':'AUS','#eng':'ENG','#ind':'IND','#pak':'PAK','#sa':'SA','#sl':'SL','#wi':'WI','#nz':'NZ','#zim':'ZIM'}
+    var selectedcountry="Australia";
+    processing();
+
+    $('.countryselect').click(function(){
+      var _id=this.id;
+      $('#totalarea').empty();
+      $('.countryselect').removeClass('countryselect-sel');
+      $('#'+_id).addClass('countryselect-sel');
+      selectedcountry=dict['#'+_id];
+      $('#title').text('ODI: '+dictabb['#'+_id]+' BATTING');
+      processing();
+    })
+
+  function processing()
+  {
+    whichcountry=selectedcountry;
+    for (i=0;i<countryruns.length;i++)
+    {
+      if (countryruns[i][0]==whichcountry)
+      {
+        runtot=countryruns[i][1];
+      }
+    }
+
+    var countrylist=[];
+    for (i=0;i<allplayers.length;i++)
+    {
+      if ((allplayers[i][6]==whichcountry)&&(parseFloat(allplayers[i][1])>20))
+      {
+        countrylist.push(allplayers[i]);
+      }
+    }
+
+    var count;
+    for (i=1;i<countrylist.length;i++)  //rearrange in ascending order
+    {
+      count=0;
+      for (j=i+1;j<countrylist.length;j++)
+      {
+        if (parseFloat(countrylist[j][1])>=parseFloat(countrylist[i][1]))
+        {
+          count++;
+        }
+      }
+      if (count>0)
+      {
+        countryruns.splice(i,1);
+      }
+    }
+
+
+    runtot=0;
+    for (i=0;i<countrylist.length;i++)
+    {//console.log(countrylist[i][1])
+      runtot+=countrylist[i][1];
+    }
+
+    pixperrun=(940*600)/runtot; //countryruns
+    var wrem=940;
+    var hrem=600;
+    var orientation=1;  //horizontal=1, vertical=-1
+    var start=0;
+    var checkfit=0,checkratio,otherdim,end,checkratio;
+    for (i=0;i<countrylist.length;i++)
+    {
+      checkfit+=parseFloat(countrylist[i][1])*pixperrun;
+      if (orientation==1)
+      {
+        otherdim=checkfit/wrem;
+        checkratio=(countrylist[start][1]*pixperrun)/(otherdim*otherdim);
+        if ((checkratio>0.625)&&(checkratio<1.6))
+        {
+          end=i;
+          drawrow(countrylist,wrem,hrem,orientation,otherdim,start,end,pixperrun);
+          start=i+1;
+          hrem=hrem-otherdim;
+          checkfit=0;
+        }
+        else
+        {
+          orientation=-1;
+        }
+      }
+
+      if (orientation==-1)
+      {
+        otherdim=checkfit/hrem;
+        checkratio=(countrylist[start][1]*pixperrun)/(otherdim*otherdim);
+        if ((checkratio>0.625)&&(checkratio<1.6))
+        {
+          end=i;
+          drawrow(countrylist,wrem,hrem,orientation,otherdim,start,end,pixperrun);
+          start=i+1;
+          wrem=wrem-otherdim;
+          checkfit=0;
+        }
+        orientation=1;
+      }
+    }
+
+
+    function drawrow(countrylist,wrem,hrem,orientation,otherdim,start,end,pixperrun) //name,runs,avg,sr,firstgame,lastgame,country
+    {
+      var pointerleft=940-wrem;
+      var pointertop=600-hrem;
+      var playerheight,playerwidth;
+      if (orientation==1)
+      {
+        for (j=start;j<=end;j++)
+        {
+          playerheight=otherdim;
+          playerwidth=(parseFloat(countrylist[j][1])*pixperrun)/otherdim;
+          drawplayer(countrylist[j][0],countrylist[j][3],countrylist[j][1],pointerleft,pointertop,playerheight,playerwidth);
+          pointerleft+=playerwidth;
+        }
+      }
+        if (orientation==-1)
+        {
+        for (j=start;j<=end;j++)
+        {
+          playerwidth=otherdim;
+          playerheight=(parseFloat(countrylist[j][1])*pixperrun)/otherdim;
+          drawplayer(countrylist[j][0],countrylist[j][3],countrylist[j][1],pointerleft,pointertop,playerheight,playerwidth);
+          pointertop+=playerheight;
+        }
+      }
+    }
+
+    function drawplayer(playername,playersr,playerruns,pointerleft,pointertop,playerheight,playerwidth)
+    {
+      var hval=playersr-30;
+      $('#totalarea').append('\
+      <div class = "playerarea"\
+          style="left:'+pointerleft+'px;  top:'+pointertop+'px;\
+                height:'+playerheight+'px;  width:'+playerwidth+'px;\
+                background-color:hsl('+hval+',100%,47%);">'+playername+'\
+                </div>\
+      ');
+    }
+  }
+
+
+    </script>
