@@ -1,0 +1,231 @@
+@font-face{
+  font-family: Vegur;
+  src: url('Vegur-Regular.otf');
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+#intro {
+  width: 300px;
+  height: 300px;
+  position: absolute;
+  top: 250px;
+  left: 1180px;
+  background-color: red;
+}
+
+#backdrop{
+  width: 1100px;
+  height: 740px;
+  background-color: #f5f7f7;
+  box-shadow: 5px 5px 2px lightgray;
+  border: 1px solid gray;
+  position: absolute;
+  top: 50px;
+  left: 30px;
+}
+
+#displayarea{
+  width: 1000px;
+  height: 600px;
+  background-color: #f5f7f7;
+  position: absolute;
+  top: 20px;
+  left: 40px;
+  overflow-y: scroll;
+
+}
+
+#bottomline{
+  width: 1000px;
+  height: 1px;
+  background-color: black;
+  position: absolute;
+  top: 620px;
+  left: 40px;
+}
+
+.bottompointer{
+  width: 1px;
+  height: 10px;
+  top: 0px;
+  background-color: black;
+  position: absolute;
+}
+
+.guides{
+  width: 1px;
+  height: 620px;
+  top: 0px;
+  background-color:lightgray;
+  position: absolute;
+  z-index: 0;
+}
+
+.bottomyear{
+  font-family: 'Vegur', sans-serif;
+  color: black;
+  font-size: 12pt;
+  position: absolute;
+  top: 10px;
+}
+
+.countryselect{
+  font-family: 'PT Sans', sans-serif;
+  color: #808285;
+  font-size: 16pt;
+  top: 680px;
+  position: absolute;
+}
+
+#aus{
+  left: 150px;
+}
+
+#eng {
+  left: 205px;
+}
+
+#ind {
+  left: 260px;
+}
+
+#pak {
+  left: 312px;
+}
+
+#sa {
+  left: 368px;
+}
+
+#sl {
+  left: 410px;
+}
+
+#wi {
+  left: 448px;
+}
+
+.countryselect:hover{
+  color:black;
+}
+
+.countrybar{
+  height: 4px;
+  position: absolute;
+  top: 35px;
+  opacity:0;
+}
+
+#aus1{
+  width: 36px;
+  background-color: #e7b73a;
+}
+
+#eng1 {
+  width: 37px;
+  background-color: #29abe2;
+}
+
+#ind1 {
+  width: 34px;
+  background-color: #2d69b2;
+}
+
+#pak1 {
+  width: 35px;
+  background-color: #67a147;
+}
+
+#sa1 {
+  width: 25px;
+  background-color: #2a6759;
+}
+
+#sl1 {
+  width: 23.5px;
+  background-color: #2e3192;
+}
+
+#wi1 {
+  width: 25px;
+  background-color: #c1272d;
+}
+
+.playerbar {
+  top: 100px;
+  left: 200px;
+  position: absolute;
+  z-index: 1;
+}
+
+.playerbar  .popup
+{
+  display: none;
+  z-index: 1;
+}
+
+.playerbar:hover  .popup {
+  display: block;
+  background-color: white;
+  box-shadow: 0 0 0 0.5px #808285 inset;
+  height: 40px;
+  position: absolute;
+}
+
+.playerorder {
+  font-family: 'Vegur', sans-serif;
+  font-size: 9pt;
+  color: black;
+  top: -20px;
+  left: 2px;
+  position: absolute;
+  width: 17px;
+  text-align: center;
+}
+.playercountry {
+  top: -21px;
+  left: 20px;
+  width: 4px;
+  height: 17px;
+  position: absolute;
+  background-color: red;
+}
+
+.playername {
+  font-family: 'PT Sans', sans-serif;
+  font-size: 9pt;
+  color: #808285;
+  top: -20px;
+  left: 30px;
+  position: absolute;
+}
+
+.statpos {
+  position: absolute;
+}
+
+.statname {
+  font-family: 'PT Sans', sans-serif;
+  font-size: 7pt;
+  color:  #808285;
+  position: absolute;
+  top: 7px;
+  z-index: 1;
+}
+
+.statvalue {
+  font-family: 'Vegur', sans-serif;
+  font-size: 9pt;
+  color: black;
+  top: 20px;
+  position: absolute;
+}
+
+.chart {
+  position: absolute;
+  height: 50px;
+  width: 50px;
+}
